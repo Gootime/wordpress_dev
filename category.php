@@ -1,33 +1,20 @@
-<?php
-/**
-* A Simple Category Template
-*/
-
-get_header(); ?> 
-<?php
-?>
+<?php get_header(); ?>
+<section id="content" role="main">
 <header class="header">
-<h1 class="entry-title"><?php _e( 'Category Archives: ', 'blankslate' ); ?><?php single_cat_title(); ?></h1>
+<h1 class="entry-title"><?php _e( 'Category Archives: ', 'PSN-Theme' ); ?><?php single_cat_title(); ?></h1>
 </header>
-<?php
-	$cat = get_query_var('cat');
-  	$yourcat = get_category ($cat);
+<?php 
+$cat_name = get_category(get_query_var('cat'))->name;
+$cat_ID = get_cat_ID( $cat_name );
+query_posts('cat='.$cat_ID.'&showposts='.get_option('posts_per_page'));
+if($query->have_posts()) :
 
-$cats = array();
-foreach (get_the_category($post_id) as $c) {
-$cat = get_category($c);
-array_push($cats, $cat->name);
+	while ( $query->have_posts() ) : 
+		$query->the_post();
+		the_title();
+	endwhile;
+endif; 
 }
-
-if (sizeOf($cats) > 0) {
-$post_categories = implode(', ', $cats);
-} else {
-$post_categories = 'Not Assigned';
-}
-
-echo $post_categories;
 ?>
-	</div>
 </section>
-
 <?php get_footer(); ?>
